@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Session | ScrollBrake</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 16px;
+            font-family: Arial, sans-serif;
+            background: #0c1020;
+            color: #e8edf7;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 30px;
+            background: #151d2e;
+            border: 1px solid #293449;
+            border-radius: 14px;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        p {
+            color: #9eacc5;
+        }
+
+        form p {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #cbd7ed;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #35445f;
+            border-radius: 8px;
+            background: #0c1020;
+            color: white;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #3978e8;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background: #2864ce;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #8fbaff;
+            text-decoration: none;
+        }
+
+        .errors {
+            color: #ff9292;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <h1>Create Scrolling Session</h1>
+        <p>Enter the details of your scrolling activity.</p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="submit-button">
+                Save Session
+            </button>
+        </form>
+
+        <a href="{% url 'session_list' %}" class="back-link">
+            &larr; Back to Sessions
+        </a>
+    </main>
+</body>
+</html>

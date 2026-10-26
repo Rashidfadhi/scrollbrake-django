@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrolling Sessions | ScrollBrake</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0c1020;
+            color: #e8edf7;
+        }
+
+        .navbar {
+            padding: 20px 5%;
+            background: #121a2b;
+            border-bottom: 1px solid #293449;
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .navbar span {
+            color: #6da0ff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 24px;
+        }
+
+        .header h1 {
+            margin-bottom: 10px;
+            font-size: 38px;
+        }
+
+        .header p {
+            color: #9eacc5;
+            font-size: 17px;
+        }
+
+        .sessions-section {
+            margin-top: 40px;
+        }
+
+        .sessions-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .sessions-heading h2 {
+            margin: 0;
+        }
+
+        .sessions-table td a {
+            color: #8fbaff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .sessions-table td a:hover {
+            color: #4d69f1;
+            text-decoration: underline;
+        }
+
+        .add-button {
+            display: inline-block;
+            padding: 11px 16px;
+            border-radius: 8px;
+            background: #3978e8;
+            color: white;
+            text-decoration: none;
+        }
+
+        .add-button:hover {
+            background: #5173ae;
+        }
+        .search-form {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .search-form input {
+            flex: 1;
+            min-width: 0;
+            padding: 12px;
+            border: 1px solid #293449;
+            border-radius: 8px;
+            background: #151d2e;
+            color: #e8edf7;
+        }
+
+        .search-form button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #3978e8;
+            color: white;
+            cursor: pointer;
+        }
+
+        .search-form a {
+            align-self: center;
+            color: #8fbaff;
+            text-decoration: none;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid #293449;
+            border-radius: 12px;
+        }
+
+        
+        /* Table layout */
+        .sessions-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+            background: #151d2e;
+        }
+
+        /* Table headers and cells */
+        .sessions-table th,
+        .sessions-table td {
+            padding: 18px 16px;
+            text-align: left;
+            vertical-align: middle;
+            border-bottom: 1px solid #293449;
+            white-space: nowrap;
+        }
+
+        /* Header */
+        .sessions-table th {
+            background: #1b2437;
+            color: #a9c5ff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Rows */
+        .sessions-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        .sessions-table tbody tr:hover {
+            background: #202b40;
+        }
+
+        /* Action links */
+        .sessions-table td:last-child {
+            min-width: 175px;
+        }
+
+        .sessions-table td:last-child a {
+            display: inline-block;
+            margin: 4px 12px 4px 0;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .sessions-table td:last-child a:not(.delete-link) {
+            color: #8fbaff;
+        }
+
+        .sessions-table td:last-child a.delete-link {
+            color: #ff8585;
+        }
+
+        .sessions-table td:last-child a:hover {
+            text-decoration: underline;
+        }
+
+        /* Created date can wrap naturally */
+        .sessions-table td:nth-child(5) {
+            white-space: normal;
+            min-width: 145px;
+        }
+
+        /* Keep table inside its container */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            border: 1px solid #293449;
+            border-radius: 12px;
+        }
+
+        .momentum {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background: #233247;
+            color: #8fbaff;
+            font-size: 13px;
+        }
+        .momentum-low {
+            background: #173b30;
+            color: #75e0b0;
+        }
+
+        .momentum-medium {
+            background: #42351d;
+            color: #ffd16a;
+        }
+
+        .momentum-high {
+            background: #48252d;
+            color: #ff929d;
+        }
+        .search-form select {
+            padding: 12px;
+            border: 1px solid #293449;
+            border-radius: 8px;
+            background: #151d2e;
+            color: #e8edf7;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: #8fbaff;
+            text-decoration: none;
+        }
+
+        .footer {
+            margin-top: 55px;
+            padding-top: 24px;
+            border-top: 1px solid #293449;
+            color: #7385a5;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 24px;
+        }
+
+        .pagination a {
+            color: #8fbaff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .pagination a:hover {
+            color: white;
+        }
+
+        .pagination span {
+            color: #9eacc5;
+        }
+
+        .export-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 18px;
+            background: #1b2940;
+            color: #8fbaff;
+            border: 1px solid #3c5275;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .export-btn:hover {
+            background: #263b5b;
+            color: #ffffff;
+            border-color: #6c8cff;
+            transform: translateY(-2px);
+        }
+
+        .export-btn span {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 28px 16px;
+            }
+
+            .header h1 {
+                font-size: 30px;
+            }
+
+            .sessions-heading {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <h2><span>Scroll</span>Brake</h2>
+    </nav>
+
+    <main class="container">
+        <header class="header">
+            <h1>Scrolling Sessions</h1>
+            <p>Review your digital activity and scrolling behavior.</p>
+        </header>
+
+        <section class="sessions-section">
+           
+        <div class="sessions-heading">
+            <h2>All Sessions</h2>
+
+            <a href="{% url 'create_session' %}" class="add-button">
+                + Add Session
+            </a>
+            <tbr>
+            <a href="{% url 'export_sessions' %}?search={{ search_query|urlencode }}&momentum={{ momentum_filter|urlencode }}"class="export-btn"><span>↓</span> Export CSV</a>
+
+             </tbr>
+        </div>
+
+
+        <form method="GET" class="search-form">
+            <input
+                type="text"
+                name="search"
+                placeholder="Search app name..."
+                value="{{ search_query }}"
+            >
+
+            <select name="momentum">
+                <option value="">All Momentum</option>
+
+                <option value="LOW"
+                    {% if momentum_filter == 'LOW' %}selected{% endif %}>
+                    Low
+                </option>
+
+                <option value="MEDIUM"
+                    {% if momentum_filter == 'MEDIUM' %}selected{% endif %}>
+                    Medium
+                </option>
+
+                <option value="HIGH"
+                    {% if momentum_filter == 'HIGH' %}selected{% endif %}>
+                    High
+                </option>
+            </select>
+
+            <button type="submit">Filter</button>
+
+            <a href="{% url 'session_list' %}">Clear</a>
+        </form>
+
+
+
+            <div class="table-wrapper">
+                <table class="sessions-table">
+                    <thead>
+                        <tr>
+                            <th>App</th>
+                            <th>Duration</th>
+                            <th>Scrolls</th>
+                            <th>Momentum</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for session in sessions %}
+                        <tr>
+                            <td>{{ session.app_name }}</td>
+                            <td>{{ session.duration }} sec</td>
+                            <td>{{ session.scroll_count }}</td>
+                            <td>
+                               <span class="momentum momentum-{{ session.momentum|lower }}">
+                                {{ session.get_momentum_display }}
+                                </span>
+                            </td>
+                            <td>{{ session.created_at|date:"d M Y, h:i A" }}</td>
+                            <td><a href="{% url 'update_session' session.pk %}">Edit</a>
+                                <tbr>
+                            <a href="{% url 'delete_session' session.pk %}" class="delete-link">Delete</a>
+                            <tbr>
+                            <a href="{% url 'session_detail' session.pk %}">Details</a>
+                        </td>
+                           
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6">No scrolling sessions found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?search={{ search_query|urlencode }}&momentum={{ momentum_filter|urlencode }}&page={{ page_obj.previous_page_number }}">
+                        &laquo; Previous
+                    </a>
+                {% endif %}
+
+                <span>
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?search={{ search_query|urlencode }}&momentum={{ momentum_filter|urlencode }}&page={{ page_obj.next_page_number }}">
+                        Next &raquo;
+                    </a>
+                {% endif %}
+            </div>
+
+
+            <a href="{% url 'home' %}" class="back-link">
+                &larr; Back to Dashboard
+            </a>
+        </section>
+
+        <footer class="footer">
+            ScrollBrake · Digital Behavior Monitoring & Analytics
+        </footer>
+    </main>
+</body>
+</html>
